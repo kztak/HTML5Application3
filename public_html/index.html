@@ -1,0 +1,70 @@
+<html>
+<head>
+<META http-equiv="ROBOTS" content="index,follow">
+<META http-equiv="content-type" content="text/html; charset=UTF-8">
+<META http-equiv="Content-Style-Type" content="text/css">
+<META NAME="keywords" CONTENT="jQuery,Ajax,Excel,CSV読み込みサンプル">
+<title>読み込みサンプル</title>
+<!--今回はjQueryをネット上から読み込んでいます-->
+<!--オフラインで使用する場合はhttp://docs.jquery.com/Downloading_jQueryからダウンロードして、リンクしてください-->
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="jquery.csv.js"></script>
+<script type="text/javascript" src="Chart.js"></script>
+</head>
+
+<body onLoad="loadTextFile()">
+    <div>CSV読み込み</div>
+        <canvas id="line" height="450" width="800"></canvas>
+    <script>
+        function loadTextFile(){
+    $(function(){
+    $.get('weight.csv',function(data){
+        var csv = $.csv()(data);
+        //indexを使ってくり返し回数をカウントします
+        $(csv).each(function(index){
+            //indexが0の場合はタイトル行なのでリンク無し、それ以外はリンクを作成
+            if(index == 0){
+                if(this[0] && this[1] && this[2] && this[3] && this[4]){
+                    //読み込んだCSVが表示できているか確認用
+                    $("#result table").append("<tr><td>"+this[0]+"</td><td>"+this[1]+"</td><td>"+this[2]+"</td><td>"+this[3]+"</td><td>"+this[4]+"</td></tr>");
+                }
+            } else {
+                if(this[0] && this[1] && this[2] && this[3] && this[4]){
+                    //読み込んだCSVが表示できているか確認用
+                    $("#result table").append("<tr><td>"+this[0]+"</td><td>"+this[1]+"</td><td>"+this[2]+"</td><td>"+this[3]+"</td><td>"+this[4]+"</td></tr>");
+                }
+            }
+        })
+    })
+})
+
+var lineChartData = {
+  labels : ["1day","2day","3day","4day","5day","6day","7day","8day","9day","10day"],
+  datasets : [
+    {
+      fillColor : "rgba(220,220,220,0.5)",
+      strokeColor : "rgba(220,220,220,1)",
+      pointColor : "rgba(220,220,220,1)",
+      pointStrokeColor : "#fff",
+      //ここに上で読み込ませたCSVを置きたい
+      data : [40,59,90,81,56,55,40,"csv[1]"]
+    },
+    {
+      fillColor : "rgba(151,187,205,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : [28,48,40,19,96,27,100]
+    }
+  ]
+}
+var myLine = new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData);
+        }
+        
+    </script>
+    <div id="result"><table border=1></table></div>
+    <noscript>
+        <p>JavaScriptがオフになっています。オンにして実行してください。</p>
+    </noscript>
+</body>
+</html>
